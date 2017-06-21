@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Survey2</string>
+    <string name="activity_list">Survey List</string>
+    <string name="activity_detail">Survey Detail</string>
+    <string name="logout_text">LOG OUT</string>
+    <string name="action_settings">Settings</string>
+</resources>

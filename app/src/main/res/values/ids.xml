@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <resources><item name="radio_button" type="id"></item>
+                <item name="checkbox_button" type="id"></item>
+    <item name="edittext_box" type="id"></item>
+    <item name="spinner" type="id"></item>
+    </resources>
