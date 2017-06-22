@@ -123,6 +123,7 @@ public class Survey_Detail extends AppCompatActivity {
 
             QuestionAndAnswerId qus1 = new QuestionAndAnswerId();
             qus1.setQuestionsID(QuestionID);
+            qus1.setQuestionText(question);
             Log.i("QuestionAndAnswerId......", qus1.getQuestionsID());
 
             linearLayout.addView(textView);

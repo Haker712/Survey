@@ -33,6 +33,7 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="Name:"
+                    android:id="@+id/reportName"
                     android:layout_weight="1"/>
 
                 <TextView
@@ -56,6 +57,7 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="Phone:"
+                    android:id="@+id/reportPhone"
                     android:layout_weight="1"/>
 
                 <TextView
@@ -80,6 +82,7 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="Email:"
+                    android:id="@+id/reportEmail"
                     android:layout_weight="1"/>
 
                 <TextView
@@ -104,6 +107,7 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="Address:"
+                    android:id="@+id/reportAddress"
                     android:layout_weight="1"/>
 
                 <TextView

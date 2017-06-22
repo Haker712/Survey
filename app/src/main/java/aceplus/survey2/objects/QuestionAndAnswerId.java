@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class QuestionAndAnswerId {
 
     String questionsID;
+    String questionText;
     ArrayList<Answer> answer;
 
 
@@ -18,6 +19,14 @@ public class QuestionAndAnswerId {
 
     public void setQuestionsID(String questionsID) {
         this.questionsID = questionsID;
+    }
+
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
     }
 
     public ArrayList<Answer> getAnswer() {
