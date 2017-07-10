@@ -10,12 +10,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Filter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,9 +42,13 @@ public class Survey_List extends AppCompatActivity {
 
     SQLiteDatabase database;
     private ArrayList<Template> gettemplate;
-    private RecyclerView.Adapter adapter;
+    private templateAdapter adapter;
     RecyclerView recyclerView;
     private Toolbar toolbar;
+    private ArrayList<Template> dictionaryWords;
+    private ArrayList<Template> filterList;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +61,34 @@ public class Survey_List extends AppCompatActivity {
         database = new DataBase(this).getDataBase();
         gettemplate = gettemplateFromDataBase();
 
+        EditText searchEdit = (EditText) findViewById(R.id.searchBox);
+        dictionaryWords = gettemplateFromDataBase();
+        filterList = new ArrayList<Template>();
+        filterList.addAll(dictionaryWords);
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclersurvey_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new templateAdapter(gettemplate);
+        assert recyclerView != null;
+        adapter = new templateAdapter(filterList);
         recyclerView.setAdapter(adapter);
+
+        searchEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    adapter.getTemFilter().filter(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     private ArrayList<Template>  gettemplateFromDataBase (){
@@ -67,7 +98,7 @@ public class Survey_List extends AppCompatActivity {
         while (c.moveToNext()){
             Template template = new Template();
             template.setId(c.getString(c.getColumnIndex("id")));
-            template.setTitle(i + ". " +c.getString(c.getColumnIndex("Name")));
+            template.setTitle(/*i + ". " +*/c.getString(c.getColumnIndex("Name")));
             template.setDescription(c.getString(c.getColumnIndex("Description")));
             template.setQoQ(c.getString(c.getColumnIndex("QuantityOfquestions")));
             templateArrayList.add(template);
@@ -80,8 +111,11 @@ public class Survey_List extends AppCompatActivity {
     public class templateAdapter extends RecyclerView.Adapter<templateAdapter.ViewHolder>{
 
         private ArrayList<Template> gettemplate;
-
+        private CustomFilter temFilter;
         public templateAdapter(ArrayList<Template> gettemplate) {
+
+            temFilter = new CustomFilter(templateAdapter.this);
+
             this.gettemplate = gettemplate;
         }
 
@@ -112,6 +146,14 @@ public class Survey_List extends AppCompatActivity {
         @Override
         public int getItemCount() {
             return gettemplate.size();
+        }
+
+        public CustomFilter getTemFilter() {
+            return temFilter;
+        }
+
+        public void setTemFilter(CustomFilter temFilter) {
+            this.temFilter = temFilter;
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -187,6 +229,42 @@ public class Survey_List extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    public class CustomFilter extends Filter {
+
+        private templateAdapter templateAdapter;
+
+        public CustomFilter(templateAdapter templateAdapter) {
+            super();
+            this.templateAdapter = templateAdapter;
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            filterList.clear();
+            final FilterResults results = new FilterResults();
+            if (charSequence.length() == 0){
+                filterList.addAll(dictionaryWords);
+            }
+            else {
+                final String filterPattern = charSequence.toString().toLowerCase().trim();
+                for (Template title : dictionaryWords){
+                    if (title.getTitle().toLowerCase().startsWith(filterPattern)){
+                        filterList.add(title);
+                    }
+                }
+            }
+            results.values = filterList;
+            results.count = filterList.size();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+
+            this.templateAdapter.notifyDataSetChanged();
+        }
     }
 
 }
