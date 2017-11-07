@@ -31,6 +31,9 @@ public class Report_List extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private ArrayList<AnswerReport> getAnswerList;
 
+    String newStr1;
+    String newStr2;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
